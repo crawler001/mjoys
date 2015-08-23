@@ -8,22 +8,28 @@ import java.io.OutputStream;
 
 public class JavaObjectSerializer implements Serializer {
 	@Override
-	public void encode(Object obj, OutputStream stream) throws IOException {
-        ObjectOutputStream objOut = new ObjectOutputStream(stream);
-        objOut.writeObject(obj);
-        objOut.close();
+	public void encode(Object obj, OutputStream stream) throws SerializerException {
+		try {
+	        ObjectOutputStream objOut = new ObjectOutputStream(stream);
+	        objOut.writeObject(obj);
+	        objOut.close();
+		} catch (IOException e) {
+			throw new SerializerException(e);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T decode(InputStream stream, Class<T> tclass) throws IOException, ClassNotFoundException {
-        ObjectInputStream objOut = new ObjectInputStream(stream);
-        Object obj = objOut.readObject();
-        objOut.close();
-        if (obj.getClass().equals(tclass)) {
+	public <T> T decode(InputStream stream, Class<T> tclass) throws SerializerException {
+		try {
+	        ObjectInputStream objOut = new ObjectInputStream(stream);
+	        Object obj = objOut.readObject();
+	        objOut.close();
         	return (T) obj;
-        } else {
-        	throw new ClassNotFoundException();
+        } catch (IOException e) {
+        	throw new SerializerException(e);
+        } catch (ClassNotFoundException e) {
+        	throw new SerializerException(e);
         }
 	}
 }

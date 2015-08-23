@@ -10,12 +10,20 @@ public class JsonSerializer implements Serializer {
 	private static final ObjectMapper mapper = new ObjectMapper();
     
 	@Override
-	public void encode(Object obj, OutputStream stream) throws IOException {
-		mapper.writeValue(stream, obj);
+	public void encode(Object obj, OutputStream stream) throws SerializerException {
+		try {
+			mapper.writeValue(stream, obj);
+		} catch (IOException e) {
+			throw new SerializerException(e);
+		}
 	}
 	
 	@Override
-	public <T> T decode(InputStream stream, Class<T> tclass) throws IOException, ClassNotFoundException {
-		return (T)mapper.readValue(stream, tclass);
+	public <T> T decode(InputStream stream, Class<T> tclass) throws SerializerException {
+		try {
+			return (T)mapper.readValue(stream, tclass);
+		} catch (IOException e) {
+			throw new SerializerException(e);
+		}
 	}
 }

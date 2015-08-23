@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketException;
 
 import mjoys.util.Address;
 import mjoys.util.Logger;
@@ -38,42 +37,20 @@ public class SocketClient {
         return connect(server);
     }
     
-    public boolean send(byte[] data, int offset, int length) {
+    public void send(byte[] data, int offset, int length) throws IOException {
         if (socket == null) {
             logger.log("socket client disconnected");
-            return false;
+            return ;
         }
-        
-        try {
-            out.write(data);
-            return true;
-        } catch (SocketException e) {
-            logger.log("socket exception when sending, reconnect ...", e);
-            reconnect();
-            logger.log("reconnect success");
-            return false;
-        } catch (IOException e) {
-            logger.log("send data exception:", e);
-            return false;
-        }
+        out.write(data, offset, length);
     }
     
-    public boolean send(byte[] data) {
-        return send(data, 0, data.length);
+    public void send(byte[] data) throws IOException {
+        send(data, 0, data.length);
     }
     
-    public int recv(byte[] buffer) {
-        try {
-            return in.read(buffer);
-        } catch (SocketException e) {
-            logger.log("socket exception when receiving, reconnect...", e);
-            reconnect();
-            logger.log("reconnect success");
-            return 0;
-        } catch (IOException e) {
-            logger.log("recv data exception", e);
-            return 0;
-        }
+    public int recv(byte[] buffer) throws IOException {
+    	return in.read(buffer);
     }
     
     private boolean connect() {
@@ -112,7 +89,7 @@ public class SocketClient {
         }
     }
     
-    private void reconnect() {
+    public void reconnect() {
         disconnect();
         
         // 重连,3s重连一次
