@@ -47,4 +47,15 @@ public class StringUtil {
     public static boolean isNotEmpty(String str) {
     	return !isEmpty(str); 
     }
+    
+    public static String toString(Object str, String defaultValue) {
+    	if (str == null) {
+    		return defaultValue;
+    	}
+    	return str.toString();
+    }
+    
+    public static String toString(Object str) {
+    	return toString(str, "");
+    }
 }

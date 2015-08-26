@@ -30,7 +30,7 @@ public class SocketServer<T> {
         this.handler = handler;
         this.connections = new HashMap<String, ClientConnection<T>>();
         
-        this.acceptor = new Acceptor();
+        this.acceptor = new Acceptor(this);
         this.acceptThread = new Thread(this.acceptor);
         this.acceptThread.start();
         
@@ -78,12 +78,8 @@ public class SocketServer<T> {
         }
     }
     
-    public T getContext(String address) {
-        ClientConnection<T> c = connections.get(address);
-        if (c != null) {
-            return c.getContext();
-        }
-        return null;
+    public ClientConnection<T> getConnection(String address) {
+    	return connections.get(address);
     }
     
     public ServerSocket getSocket() {

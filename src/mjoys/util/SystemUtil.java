@@ -13,7 +13,7 @@ public class SystemUtil {
 	        String line = reader.readLine();
 	        StringBuilder str = new StringBuilder();
 	        while (line != null) {
-	            str.append(line).append(System.lineSeparator());
+	            str.append(line).append(System.getProperty("line.separator"));
 	            line = reader.readLine();
 	        }
 	        return str.toString();

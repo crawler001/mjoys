@@ -43,9 +43,7 @@ public class ByteBufferParser {
 			logger.log("parse TLV frame error: bad length");
 			return null;
 		}
-		tlv.body = buffer.slice();
-		tlv.body.limit(tlv.body.position() + tlv.length);
-		buffer.position(buffer.position() + tlv.length);
+		tlv.body = buffer;
 		return tlv;
 	}
 

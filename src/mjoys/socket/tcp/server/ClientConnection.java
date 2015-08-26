@@ -7,7 +7,7 @@ import mjoys.util.Logger;
 public class ClientConnection<T> {
     private T context;
     private Socket socket;
-    private boolean isHandling;
+    private boolean isHandling = true;
     private ClientHandler<T> handler;
     private Logger logger = new Logger().addPrinter(System.out);
     

@@ -1,20 +1,26 @@
 package mjoys.socket.tcp.server;
 
 import java.io.IOException;
+import java.net.Socket;
 
 import mjoys.util.Logger;
 
 public class Acceptor implements Runnable {
     private SocketServer<?> server;
     private boolean isAccepting = true;
-    
     private final static Logger logger = new Logger().addPrinter(System.out);
+    
+    public Acceptor(SocketServer<?> server) {
+    	this.server = server;
+    }
     
     @Override
     public void run() {
         while (isAccepting) {
             try {
-                server.addConnection(server.getSocket().accept());
+            	Socket socket = server.getSocket().accept();
+            	logger.log("new client connection:%s", socket.getRemoteSocketAddress().toString());
+                server.addConnection(socket);
             } catch (IOException e) {
                 logger.log("accept connection exception: bound address=%s", e, server.getSocket().getLocalSocketAddress().toString());
             }

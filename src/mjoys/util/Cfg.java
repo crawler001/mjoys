@@ -19,7 +19,7 @@ public class Cfg {
         this.cfgFilePath = PathUtil.combine(root, cfgFilePathInRoot);
         this.defaultPropertyFile = new File(this.cfgFilePath, defaultPropertyFileName);
         if (!this.defaultPropertyFile.exists()) {
-            logger.log("can't find cfg file");
+            logger.log("can't find cfg file:" + this.defaultPropertyFile.getAbsolutePath());
             return;
         }
         

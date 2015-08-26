@@ -53,6 +53,10 @@ public class SocketClient {
     	return in.read(buffer);
     }
     
+    public int recv(byte[] buffer, int offset, int length) throws IOException {
+    	return in.read(buffer, offset, length);
+    }
+    
     private boolean connect() {
         if (socket != null) {
             return true;
