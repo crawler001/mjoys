@@ -7,11 +7,13 @@ import mjoys.io.ByteBufferOutputStream;
 import mjoys.io.JavaObjectSerializer;
 import mjoys.io.JsonSerializer;
 import mjoys.io.Serializer;
+import mjoys.util.PathUtil;
+import mjoys.util.SystemUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestSerializer {
+public class TestAll {
 	@Test
 	public void testJsonSerializer() throws Exception{
 		Ts ts = new Ts();
@@ -31,4 +33,16 @@ public class TestSerializer {
 			buffer.clear();
 		}
 	}
+	
+	@Test
+	public void testReplaceEnv() {
+		String path = PathUtil.replaceEnvInPath("$JAVA_HOME\\bin");
+		Assert.assertEquals(path, "C:\\Program Files\\Java\\jdk1.6.0_39\\bin");
+	}
+	
+    @Test
+    public void testGetPid() {
+    	Integer pid = SystemUtil.getPidByJps("jps");
+    	Assert.assertNotNull(pid);
+    }
 }

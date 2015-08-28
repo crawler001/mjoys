@@ -8,15 +8,19 @@ public class FileUtil {
 			return;
 		}
 		
+		if (filter == null || filter.accept(file)) {
+			handler.handle(file, ctx);
+		}
+		
 		if (file.isFile()) {
-			if (filter == null || filter.accept(file)) {
-				handler.handle(file, ctx);
-			}
 			return;
 		}
 		
-		for (File child : file.listFiles()) {
-			handle(child, filter, handler, ctx);
+		if (file.isDirectory()) {
+			for (File child : file.listFiles()) {
+				if (!child.equals(file))
+					handle(child, filter, handler, ctx);
+			}
 		}
 	}
 }

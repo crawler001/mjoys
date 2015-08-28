@@ -5,6 +5,7 @@ import java.net.SocketAddress;
 
 public class Address {
     public enum Protocol {
+    	Unknown,
         Tcp,
         Udp,
         Pipe
@@ -16,6 +17,34 @@ public class Address {
     private Address(Protocol p, String address) {
         this.protocol = p;
         this.address = address;
+    }
+    
+    public static Address newAddress(Protocol p, String address) {
+    	return new Address(p, address);
+    }
+    
+    public static Protocol parseProtocol(String protocol) {
+    	if (protocol.equalsIgnoreCase(Protocol.Tcp.name())) {
+    		return Protocol.Tcp;
+    	} else if (protocol.equalsIgnoreCase(Protocol.Udp.name())) {
+    		return Protocol.Udp;
+    	} else if (protocol.equalsIgnoreCase(Protocol.Udp.name())) {
+    		return Protocol.Pipe;
+    	} else {
+    		return Protocol.Unknown;
+    	}
+    }
+    
+    public static String getAddressWithPort(String ip, int port) {
+    	return ip + ":" + port;
+    }
+    
+    public static Address getTcpAddress(String ip, int port) {
+    	return new Address(Protocol.Tcp, getAddressWithPort(ip, port));
+    }
+    
+    public static Address getUdpAddress(String ip, int port) {
+    	return new Address(Protocol.Udp, getAddressWithPort(ip, port));
     }
     
     public static Address parse(String url) {
