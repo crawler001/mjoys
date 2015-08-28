@@ -30,6 +30,10 @@ public class Formater {
     }
     
     public static <T> String formatArray(T[] es) {
+    	if (es == null) {
+    		return "";
+    	}
+    	
         StringBuilder str = new StringBuilder();
         if (es.length != 0) {
         	str.append('[');
