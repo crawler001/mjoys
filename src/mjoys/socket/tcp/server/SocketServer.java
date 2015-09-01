@@ -39,7 +39,8 @@ public class SocketServer<T> {
     
     public void stop() {
        for (ClientConnection<T> c : connections.values()) {
-           c.stop();
+           c.getHandler().stop();
+           c.disconnect();
        }
        
        this.acceptor.stop();
@@ -50,17 +51,20 @@ public class SocketServer<T> {
     }
     
     public void disconnect(String address) {
-        ClientConnection<T> c = connections.get(address);
+    	ClientConnection<T> c = connections.get(address);
         if (c != null) {
-            c.stop();
+            c.getHandler().stop();
+            c.disconnect();
             connections.remove(socket);
+            logger.log("remove connection:%s", address);
         }
     }
     
     public void addConnection(Socket socket) {
         Address peerAddress = Address.fromSocketAddress(socket.getRemoteSocketAddress());
-        ClientConnection<T> connection = new ClientConnection<T>(socket, handler);
+        ClientConnection<T> connection = new ClientConnection<T>(this, socket, handler);
         this.connections.put(peerAddress.toString(), connection);
+        logger.log("new connection:%s", peerAddress.toString());
     }
     
     public boolean setClientContext(String address, T ctx) {
@@ -76,6 +80,16 @@ public class SocketServer<T> {
             logger.log("can't find the connection:%s", address);
             return false;
         }
+    }
+    
+    public void removeConnection(ClientConnection<T> conn) {
+    	for (String k : connections.keySet()) {
+    		if (connections.get(k) == conn) {
+    			connections.remove(k);
+    			logger.log("remove connection:%s", k);
+    			break;
+    		}
+    	}
     }
     
     public ClientConnection<T> getConnection(String address) {

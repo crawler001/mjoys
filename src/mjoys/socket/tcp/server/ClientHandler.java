@@ -1,8 +1,7 @@
 package mjoys.socket.tcp.server;
 
-import java.io.IOException;
-
 public class ClientHandler<T> implements Runnable {
+	private boolean isHandling = true;
     private ClientConnection<T> connection;
     private ClientConnectionHandler<T> handler;
     
@@ -13,28 +12,19 @@ public class ClientHandler<T> implements Runnable {
     
     @Override
     public void run() {
-        while (connection.isHandling()) {
+        while (isHandling) {
             int result = handler.handle(connection);
             if (result < 0) {
-                stop();
+            	if (isHandling == true) {
+            		connection.disconnect();
+            		connection.remove();
+            		isHandling = false;;
+            	}
             }
         }
     }
     
     public void stop() {
-        if (connection.isHandling() == false) {
-            return;
-        }
-        
-        connection.setHandling(false);
-        
-        try {
-            connection.getSocket().close();
-        } catch (IOException e) {
-            connection.getLogger().log("close exception: server=%s, client=%s", 
-                    e,
-                    connection.getSocket().getLocalSocketAddress().toString(),
-                    connection.getSocket().getRemoteSocketAddress().toString());
-        }
+    	isHandling = false;
     }
 }
