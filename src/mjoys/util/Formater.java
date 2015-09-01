@@ -2,6 +2,7 @@ package mjoys.util;
 
 import java.nio.ByteBuffer;
 import java.util.Collection;
+import java.util.Map;
 
 public class Formater {
     public static String formatMac(byte[] mac) {
@@ -49,7 +50,7 @@ public class Formater {
     }
     
     public static String formatEntry(Object key, Object value) {
-        return key + ":" + value;
+        return new StringBuilder().append(key).append(":").append(value).toString();
     }
     
     public static String formatEntries(Object ...es) {
@@ -65,5 +66,15 @@ public class Formater {
     
     public static String format(Object ...es) {
         return formatArray(es);
+    }
+    
+    public static <K, V> String formatMap(Map<K, V> map) {
+    	Object[] set = new Object[map.size() * 2];
+    	int i = 0;
+    	for (K k : map.keySet()) {
+    		set[i++] = k;
+    		set[i++] = map.get(k);
+    	}
+    	return formatEntries(set);
     }
 }

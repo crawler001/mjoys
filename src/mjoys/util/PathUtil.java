@@ -4,12 +4,16 @@ import java.io.File;
 
 public class PathUtil {
     public final static String combine(String ...es) {
+    	return combineWithSep(File.separator, es);
+    }
+    
+    public final static String combineWithSep(String separator, String ...es) {
     	StringBuilder str = new StringBuilder();
     	for (String e : es) {
-    		str.append(e).append(File.separator);
+    		str.append(e).append(separator);
     	}
     	if (es.length > 0)
-    		str.setLength(str.length() - File.separator.length());
+    		str.setLength(str.length() - separator.length());
     	return str.toString();
     }
     
