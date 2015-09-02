@@ -14,7 +14,11 @@ public class Address {
     private Protocol protocol;
     private String address;
     
-    private Address(Protocol p, String address) {
+    public Address() {
+    	
+    }
+    
+    public Address(Protocol p, String address) {
         this.protocol = p;
         this.address = address;
     }

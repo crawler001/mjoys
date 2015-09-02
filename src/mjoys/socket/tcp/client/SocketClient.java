@@ -72,7 +72,7 @@ public class SocketClient {
             return true;
         } catch (IOException e) {
             this.socket = null;
-            logger.log("socket client connect server exception:", e);
+            logger.log("socket client connect server failed:" + e.getMessage());
             return false;
         }
     }
