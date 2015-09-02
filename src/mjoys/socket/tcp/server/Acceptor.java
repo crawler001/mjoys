@@ -19,8 +19,8 @@ public class Acceptor implements Runnable {
         while (isAccepting) {
             try {
             	Socket socket = server.getSocket().accept();
+            	server.addConnection(socket);
             	logger.log("new client connection:%s", socket.getRemoteSocketAddress().toString());
-                server.addConnection(socket);
             } catch (IOException e) {
                 logger.log("accept connection exception: bound address=%s", e, server.getSocket().getLocalSocketAddress().toString());
             }

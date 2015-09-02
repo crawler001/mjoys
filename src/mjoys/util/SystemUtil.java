@@ -2,6 +2,7 @@ package mjoys.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.StringReader;
@@ -15,25 +16,27 @@ public class SystemUtil {
 			
 			String s = null;
             StringBuilder str = new StringBuilder();
-			if (p.getInputStream().available() > 0) {
-				BufferedReader stdIn = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            InputStream in = p.getInputStream();
+			if (in.available() > 0) {
+				BufferedReader stdIn = new BufferedReader(new InputStreamReader(in));
 	            while ((s = stdIn.readLine()) != null) {
-	                System.out.println(s);
 	                str.append(s).append("\r\n");
 	            }
-	            stdIn.close();
 			}
-			if (p.getErrorStream().available() > 0) {
-				BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+			in.close();
+			
+			InputStream error = p.getErrorStream();
+			if (error.available() > 0) {
+				BufferedReader stdError = new BufferedReader(new InputStreamReader(error));
 	            while ((s = stdError.readLine()) != null) {
-	                System.out.println(s);
 	                str.append(s).append("\r\n");
 	            }
-	            stdError.close();
 			}
+			error.close();
             
+			p.waitFor();
 			p.destroy();
-			logger.log("run cmd: %s\r\n%s", cmd, str.toString());
+			logger.log("run cmd: %s\r\nresult: %s", cmd, str.toString());
 	        return str.toString();
 		} catch (Exception e) {
 			logger.log("run cmd exception", e);

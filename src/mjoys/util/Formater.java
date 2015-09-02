@@ -40,7 +40,7 @@ public class Formater {
         	str.append('[');
         }
         for (Object e : es) {
-            str.append(e.toString()).append(", ");
+            str.append(StringUtil.toString(e)).append(", ");
         }
         if (es.length != 0) {
             str.setLength(str.length() - ", ".length());
@@ -50,7 +50,7 @@ public class Formater {
     }
     
     public static String formatEntry(Object key, Object value) {
-        return new StringBuilder().append(key).append(":").append(value).toString();
+        return new StringBuilder().append(StringUtil.toString(key)).append(":").append(StringUtil.toString(value)).toString();
     }
     
     public static String formatEntries(Object ...es) {
@@ -69,6 +69,10 @@ public class Formater {
     }
     
     public static <K, V> String formatMap(Map<K, V> map) {
+    	if (map == null) {
+    		return "";
+    	}
+    	
     	Object[] set = new Object[map.size() * 2];
     	int i = 0;
     	for (K k : map.keySet()) {
