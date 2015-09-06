@@ -42,7 +42,9 @@ public class SocketClient {
             logger.log("socket client disconnected");
             return ;
         }
-        out.write(data, offset, length);
+        synchronized(out) {
+        	out.write(data, offset, length);
+        }
     }
     
     public void send(byte[] data) throws IOException {
@@ -54,7 +56,9 @@ public class SocketClient {
     }
     
     public int recv(byte[] buffer, int offset, int length) throws IOException {
-    	return in.read(buffer, offset, length);
+    	synchronized(in) {
+    		return in.read(buffer, offset, length);
+    	}
     }
     
     private boolean connect() {

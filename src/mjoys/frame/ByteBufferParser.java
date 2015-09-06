@@ -40,7 +40,7 @@ public class ByteBufferParser {
 		tlv.tag = buffer.getInt();
 		tlv.length = buffer.getInt();
 		if (buffer.remaining() < tlv.length) {
-			logger.log("parse TLV frame error: bad length");
+			logger.log("warning: buffer length is less than body");
 			return null;
 		}
 		tlv.body = buffer;
